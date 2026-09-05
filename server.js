@@ -130,6 +130,12 @@ app.use(
   })
 );
 
+// Rota raiz explícita para entrega do index.html (Previne 'Cannot GET /')
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+
 /**
  * ============================================================================
  * UTILITÁRIOS DE SEGURANÇA (Validação, Sanitização e Hash)
@@ -248,6 +254,14 @@ app.post('/api/bolsas/simular', (req, res) => {
   }
 });
 
+// Middleware de Fallback SPA para rotas não-API (Entrega index.html)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Middleware Global de Tratamento de Erros (Sem vazamento de Stack Traces)
 app.use((err, req, res, next) => {
   console.error('[UNHANDLED_ERROR]', err.message);
@@ -256,8 +270,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Iniciar Servidor
-app.listen(PORT, () => {
-  console.log(`[SENAI-SP ENTERPRISE SERVER] Ativo em http://localhost:${PORT}`);
-  console.log(`[SECURITY] Headers Helmet, CSP, HSTS e Rate Limiting ativados.`);
-});
+// Iniciar Servidor se executado diretamente
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`[SENAI-SP ENTERPRISE SERVER] Ativo em http://localhost:${PORT}`);
+    console.log(`[SECURITY] Headers Helmet, CSP, HSTS e Rate Limiting ativados.`);
+  });
+}
+
+export default app;
+
