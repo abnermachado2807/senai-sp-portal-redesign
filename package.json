@@ -1,0 +1,22 @@
+{
+  "name": "senai-sp-portal-enterprise",
+  "version": "2.0.0",
+  "description": "Portal SENAI-SP com arquitetura segura de missão crítica e padrões OWASP Top 10",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "audit": "npm audit --audit-level=high"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.5.0",
+    "dotenv": "^16.4.7",
+    "cookie-parser": "^1.4.7",
+    "validator": "^13.12.0",
+    "zod": "^3.24.2",
+    "bcryptjs": "^2.4.3"
+  }
+}
